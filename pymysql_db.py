@@ -46,4 +46,13 @@ cursor.execute("USE db_pymysql")
 #     print("-")
 
 # Ubah Data
-mysql_delete_data = "UPDATE nama_tabel set kolom1/field1 = data_baru1, kolom2/field2 = data_baru2 WHERE [kondisi];"
+# mysql_delete_data = "UPDATE nama_tabel set kolom1/field1 = data_baru1, kolom2/field2 = data_baru2 WHERE [kondisi];"
+
+# mysql_delete_data = "DELETE FROM %s WHERE %s%s"
+# nama_tabel = "tbl_user"
+# nama_kolom = "id_user="
+
+# value_kolom = 5
+
+# print(mysql_delete_data % (nama_tabel,
+#                            nama_kolom, value_kolom))
