@@ -1,58 +1,87 @@
 import pymysql
 
-# Inisiasi Database
-db = pymysql.connect(host="localhost", user="root", password="")
-cursor = db.cursor()
-
 # Buat Database
-cursor.execute("CREATE DATABASE IF NOT EXISTS db_pymysql")
 
-# Menggunakan Database
-cursor.execute("USE db_pymysql")
+
+def create_db(db_name):
+    conn = pymysql.connect(host="localhost", user="root", password="")
+    connection = conn.cursor()
+    queri = "CREATE DATABASE IF NOT EXISTS %s"
+    connection.execute(queri % (db_name))
+    conn.close()
+
 
 # Membuat Tabel
-mysql_create_table = "CREATE TABLE IF NOT EXISTS tbl_user (id_user int(11) NOT NULL, nama varchar(20) NOT NULL)"
-cursor.execute(mysql_create_table)
+def create_table(db_name, tbl_name):
+    conn = pymysql.connect(host="localhost", user="root", password="")
+    connection = conn.cursor()
+    connection.execute("USE %s" % (db_name))
+    queri = "CREATE TABLE IF NOT EXISTS %s (id_user int(11) NOT NULL, nama varchar(20) NOT NULL)"
+    connection.execute(queri % (tbl_name))
+    conn.close()
 
-# Menggunakan Database
-cursor.execute("USE db_pymysql")
 
-# Mengisi Tabel
-# mysql_insert_data = "INSERT INTO tbl_user (id_user, nama) VALUES (%s, %s)"
-# value_table = (6, "Defan")
-# try:
-#     cursor.execute(mysql_insert_data, value_table)
-#     db.commit()
-# except:
-#     print("Sesuatu Salah")
-#     db.rollback()
-# finally:
-#     db.close()
-#     print("-")
+# Membuat Data
+def create_data(db_name, tbl_name, data):
+    conn = pymysql.connect(host="localhost", user="root", password="")
+    connection = conn.cursor()
+    connection.execute("USE %s" % (db_name))
+    queri = "INSERT INTO "+str(tbl_name)+" (id_user, nama) VALUES (%s, %s)"
+    try:
+        connection.execute(queri % data)
+        conn.commit()
+    except:
+        print("Sesuatu Salah")
+        conn.rollback()
+    finally:
+        conn.close()
+
 
 # Hapus Data
-# mysql_delete_data = "DELETE FROM tbl_user WHERE %s%s"
-# nama_kolom = "id_user="
-# value_kolom = 5
-# try:
-#     cursor.execute(mysql_delete_data % (
-#         nama_kolom, value_kolom))
-#     db.commit()
-# except:
-#     print("Sesuatu Salah")
-#     db.rollback()
-# finally:
-#     db.close()
-#     print("-")
+def delete_data(db_name, tbl_name, id):
+    conn = pymysql.connect(host="localhost", user="root", password="")
+    connection = conn.cursor()
+    connection.execute("USE %s" % (db_name))
+    queri = "DELETE FROM "+str(tbl_name)+" WHERE %s%s"
+    nama_kolom = "id_user="
+    value_kolom = id
+    try:
+        connection.execute(mysql_delete_data % (
+            nama_kolom, value_kolom))
+        conn.commit()
+    except:
+        print("Sesuatu Salah")
+        conn.rollback()
+    finally:
+        conn.close()
+        print("-")
 
-# Ubah Data
-# mysql_delete_data = "UPDATE nama_tabel set kolom1/field1 = data_baru1, kolom2/field2 = data_baru2 WHERE [kondisi];"
 
-# mysql_delete_data = "DELETE FROM %s WHERE %s%s"
-# nama_tabel = "tbl_user"
-# nama_kolom = "id_user="
+def show_data(db_name, tbl_name, id):
+    conn = pymysql.connect(host="localhost", user="root", password="")
+    connection = conn.cursor()
+    connection.execute("USE %s" % (db_name))
+    queri = "SELECT * FROM "+str(tbl_name)+" WHERE %s%s"
+    nama_kolom = "id_user="
+    value_kolom = id
+    try:
+        connection.execute(queri % (
+            nama_kolom, value_kolom))
+        results = connection.fetchall()
+    except:
+        print("Sesuatu Salah")
+    finally:
+        conn.close()
+    return results
 
-# value_kolom = 5
 
-# print(mysql_delete_data % (nama_tabel,
-#                            nama_kolom, value_kolom))
+res = show_data("db_pymysql", "tbl_user", 1)
+list_data = []
+data_count = []
+for x in res:
+    for i in (x):
+        list_data.append(i)
+    data_count.append(list_data)
+print(data_count)
+
+# https://www.databasejournal.com/mysql/the-10-most-common-mysql-queries/
