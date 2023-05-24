@@ -26,8 +26,9 @@ def create_data(db_name, tbl_name, data):
     conn = pymysql.connect(host="localhost", user="root", password="")
     connection = conn.cursor()
     connection.execute("USE %s" % (db_name))
-    queri = "INSERT INTO "+str(tbl_name)+" (id_user, nama) VALUES (%s, %s)"
+    queri = "INSERT INTO "+str(tbl_name)+" (id_user, nama) VALUES (%s, '%s')"
     try:
+        print(queri % data)
         connection.execute(queri % data)
         conn.commit()
     except:
@@ -46,7 +47,7 @@ def delete_data(db_name, tbl_name, id):
     nama_kolom = "id_user="
     value_kolom = id
     try:
-        connection.execute(mysql_delete_data % (
+        connection.execute(queri % (
             nama_kolom, value_kolom))
         conn.commit()
     except:
@@ -75,13 +76,18 @@ def show_data(db_name, tbl_name, id):
     return results
 
 
-res = show_data("db_pymysql", "tbl_user", 1)
-list_data = []
-data_count = []
-for x in res:
-    for i in (x):
-        list_data.append(i)
-    data_count.append(list_data)
-print(data_count)
+# res = show_data("db_pymysql", "tbl_user", 1)
+# list_data = []
+# data_count = []
+# for x in res:
+#     for i in (x):
+#         list_data.append(i)
+#     data_count.append(list_data)
+# print(data_count)
+
+# delete_data("db_pymysql", "tbl_user", 6)
+
+# data = (6, 'Sullivan')
+# create_data("db_pymysql", "tbl_user", data)
 
 # https://www.databasejournal.com/mysql/the-10-most-common-mysql-queries/
